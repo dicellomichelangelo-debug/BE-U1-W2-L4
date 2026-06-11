@@ -34,20 +34,31 @@ public class Application {
 
         System.out.println("---Esercizio 1---");
 
+        // Raggruppare gli ordini per cliente utilizzando Stream e Lambda Expressions. Crea una mappa in cui la chiave
+        // è il cliente e il valore è una lista di ordini effettuati da quel cliente
+
         Map<Customer, List<Order>> orderByClient = ordini.stream().collect(Collectors.groupingBy(Order::getCustomer));
         orderByClient.forEach((customer, order) -> System.out.println("Cliente: " + customer + "Order: " + order));
 
         System.out.println("---Esercizio 2---");
+
+        // Dato un elenco di ordini, calcola il totale delle vendite per ogni cliente utilizzando Stream e Lambda Expressions. Crea una mappa in cui la chiave
+        // è il cliente e il valore è l'importo totale dei suoi acquisti (Tip: potrebbe essere molto utile avere all'interno della classe Order un metodo
+        // calculateTotal() che ci dia il totale dei prodotti ordinati)
 
         Map<Customer, Double> sumOrderClient = ordini.stream().collect(Collectors.groupingBy(Order::getCustomer, Collectors.summingDouble(Order::calcolateTot)));
         sumOrderClient.forEach((customer, sum) -> System.out.println("Cliente: " + customer + "Spesa totale: " + sum));
 
         System.out.println("---Esercizio 3---");
 
+        // Dato un elenco di prodotti, trova i prodotti più costosi utilizzando Stream e Lambda Expressions
+
         List<Product> prodottiCostosi = prodotti.stream().sorted(Comparator.comparingDouble(Product::getPrice).reversed()).limit(2).toList();
         prodottiCostosi.forEach(System.out::println);
 
         System.out.println("---Esercizio 4---");
+
+        // Dato un elenco di ordini, calcola la media degli importi degli ordini utilizzando Stream e Lambda Expressions
 
         OptionalDouble mediaOrdini = ordini.stream().mapToDouble(Order::calcolateTot).average();
         if (mediaOrdini.isPresent()) System.out.println("La media degli ordini è: " + mediaOrdini.getAsDouble());
@@ -55,6 +66,8 @@ public class Application {
 
         System.out.println("---Esercizio 5---");
 
+        // Dato un elenco di prodotti, raggruppa i prodotti per categoria e calcola la somma degli importi per ogni categoria utilizzando Stream e Lambda Expressions
+        
         Map<String, Double> totalePerCategoria = prodotti.stream().collect(Collectors.groupingBy(Product::getCategory, Collectors.summingDouble(Product::getPrice)));
         totalePerCategoria.forEach((categoria, tot) -> System.out.println("Categoria: " + categoria + " Prezzo totale: " + tot));
     }
