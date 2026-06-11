@@ -19,6 +19,11 @@ public class Order extends MainAbstract {
         this.customer = customer;
     }
 
+    public double calcolateTot() {
+        return products.stream().mapToDouble(Product::getPrice).sum();
+
+    }
+
     public Customer getCustomer() {
         return customer;
     }

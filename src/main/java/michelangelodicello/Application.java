@@ -5,9 +5,8 @@ import entities.Order;
 import entities.Product;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Application {
     public static void main(String[] args) {
@@ -35,10 +34,28 @@ public class Application {
 
         System.out.println("---Esercizio 1---");
 
-        
+        Map<Customer, List<Order>> orderByClient = ordini.stream().collect(Collectors.groupingBy(Order::getCustomer));
+        orderByClient.forEach((customer, order) -> System.out.println("Cliente: " + customer + "Order: " + order));
+
         System.out.println("---Esercizio 2---");
+
+        Map<Customer, Double> sumOrderClient = ordini.stream().collect(Collectors.groupingBy(Order::getCustomer, Collectors.summingDouble(Order::calcolateTot)));
+        sumOrderClient.forEach((customer, sum) -> System.out.println("Cliente: " + customer + "Spesa totale: " + sum));
+
         System.out.println("---Esercizio 3---");
+
+        List<Product> prodottiCostosi = prodotti.stream().sorted(Comparator.comparingDouble(Product::getPrice).reversed()).limit(2).toList();
+        prodottiCostosi.forEach(System.out::println);
+
         System.out.println("---Esercizio 4---");
+
+        OptionalDouble mediaOrdini = ordini.stream().mapToDouble(Order::calcolateTot).average();
+        if (mediaOrdini.isPresent()) System.out.println("La media degli ordini è: " + mediaOrdini.getAsDouble());
+        else System.out.println("La media non è possibile");
+
         System.out.println("---Esercizio 5---");
+
+        Map<String, Double> totalePerCategoria = prodotti.stream().collect(Collectors.groupingBy(Product::getCategory, Collectors.summingDouble(Product::getPrice)));
+        totalePerCategoria.forEach((categoria, tot) -> System.out.println("Categoria: " + categoria + " Prezzo totale: " + tot));
     }
 }
